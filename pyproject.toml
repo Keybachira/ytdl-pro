@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "ytdl-pro"
@@ -29,6 +29,7 @@ classifiers = [
 dependencies = [
     "yt-dlp>=2024.1.0",
     "rich>=13.0.0",
+    "textual>=8.0.0",
     "python-dotenv>=1.0.0",
     "questionary>=2.0.0",
     "click>=8.1.0",
@@ -38,12 +39,8 @@ dependencies = [
 ]
 
 [project.scripts]
-ytdl-pro = "ytdl_pro.main:cli"
-ytdl = "ytdl_pro.main:cli"
-
-[project.urls]
-Homepage = "https://github.com/ytdl-pro/ytdl-pro"
-Documentation = "https://github.com/ytdl-pro/ytdl-pro#readme"
+ytdl-pro = "ytdl_pro.main:main"
+ytdl = "ytdl_pro.main:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

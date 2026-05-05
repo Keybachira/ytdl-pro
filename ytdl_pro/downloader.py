@@ -13,8 +13,8 @@ from datetime import datetime
 
 import yt_dlp
 
-from .config import ConfigManager, HistoricoManager
-from .ui import (
+from config import ConfigManager, HistoricoManager
+from ui import (
     console, exibir_sucesso, exibir_erro, exibir_aviso,
     exibir_info, criar_progresso_download, VERDE, LARANJA,
     VERMELHO, AMARELO, CIANO, CINZA, BRANCO, ROXO,
@@ -69,6 +69,8 @@ class YTDLPro:
         else:
             altura = qualidade if qualidade.isdigit() else "1080"
             fmt_video = (
+                f"bestvideo[height<={altura}][vcodec^=avc][ext=mp4]+bestaudio[ext=m4a]/"
+                f"bestvideo[height<={altura}][vcodec^=avc]+bestaudio/"
                 f"bestvideo[height<={altura}][ext=mp4]+bestaudio[ext=m4a]/"
                 f"bestvideo[height<={altura}]+bestaudio/best[height<={altura}]/best"
             )
@@ -214,7 +216,7 @@ class YTDLPro:
             if video_id:
                 existente = self.historico.ja_baixado(video_id)
                 if existente:
-                    from .ui import exibir_confirmacao_duplicata
+                    from ui import exibir_confirmacao_duplicata
                     resposta = self._duplicata_resposta_global
                     if not resposta:
                         titulo = info_pre.get("title", "Desconhecido")
@@ -513,4 +515,4 @@ class YTDLPro:
 
 
 # Importação atrasada para evitar circular
-from .ui import AZUL  # noqa
+from ui import AZUL  # noqa
