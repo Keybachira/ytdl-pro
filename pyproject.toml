@@ -5,42 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ytdl-pro"
 version = "1.0.0"
-description = "Downloader profissional de vídeos e playlists do YouTube com interface TUI incrível"
-readme = "README.md"
+description = "Downloader profissional YouTube com interface TUI"
 requires-python = ">=3.9"
-license = {text = "MIT"}
-authors = [
-    {name = "ytdl-pro", email = "dev@ytdlpro.com"}
-]
-keywords = ["youtube", "download", "video", "playlist", "cli", "tui"]
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Console",
-    "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Multimedia :: Video",
-]
 dependencies = [
     "yt-dlp>=2024.1.0",
-    "rich>=13.0.0",
     "textual>=8.0.0",
-    "python-dotenv>=1.0.0",
-    "questionary>=2.0.0",
-    "click>=8.1.0",
-    "mutagen>=1.47.0",
-    "requests>=2.31.0",
-    "Pillow>=10.0.0",
 ]
 
 [project.scripts]
 ytdl-pro = "ytdl_pro.main:main"
-ytdl = "ytdl_pro.main:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

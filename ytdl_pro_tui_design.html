@@ -1,0 +1,376 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', monospace; }
+
+  .terminal {
+    background: #0a0a0a;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #1e1e1e;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #c8c8c8;
+    width: 100%;
+  }
+
+  .titlebar {
+    background: #111;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .dot { width:11px;height:11px;border-radius:50%; }
+  .dot.r{background:#ff5f57;} .dot.y{background:#ffbd2e;} .dot.g{background:#28ca41;}
+  .titlebar-text { color:#333; font-size:12px; margin-left:auto; margin-right:auto; letter-spacing:2px; }
+
+  .topbar {
+    background: #0d0d0d;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 36px;
+    gap: 12px;
+  }
+  .topbar-logo { color: #ff4500; font-weight: bold; font-size: 13px; letter-spacing: 1px; width: 140px; }
+  .topbar-title { color: #ff6b35; font-size: 12px; letter-spacing: 5px; flex: 1; text-align: center; }
+  .topbar-right { color: #2a2a2a; font-size: 12px; width: 140px; text-align: right; }
+  .topbar-right span { color: #00ff87; }
+
+  .main { display: flex; height: 460px; }
+
+  .sidebar {
+    width: 140px;
+    background: #080808;
+    border-right: 1px solid #161616;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sb-brand {
+    padding: 12px 10px 10px;
+    border-bottom: 1px solid #141414;
+  }
+  .sb-brand-name { color: #ff4500; font-size: 12px; font-weight: bold; }
+  .sb-brand-ver  { color: #222; font-size: 11px; margin-top: 2px; }
+  .sb-brand-line { color: #1a1a1a; font-size: 11px; margin-top: 6px; }
+
+  .sb-group { color: #222; font-size: 10px; padding: 10px 10px 4px; letter-spacing: 1px; }
+
+  .sb-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    color: #2e2e2e;
+    font-size: 12px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+  }
+  .sb-item:hover { background: #0f0f0f; color: #888; }
+  .sb-item.active {
+    background: #101010;
+    color: #ff6b35;
+    border-left: 2px solid #ff4500;
+    font-weight: bold;
+  }
+  .sb-icon { font-size: 11px; width: 14px; }
+
+  .sb-stats {
+    margin-top: auto;
+    border-top: 1px solid #141414;
+    padding: 10px;
+  }
+  .sb-stats-title { color: #1e1e1e; font-size: 10px; margin-bottom: 6px; letter-spacing: 1px; }
+  .sb-stat { display:flex; justify-content:space-between; margin-bottom:3px; }
+  .sb-stat-label { color: #252525; font-size: 11px; }
+  .sb-stat-val   { font-size: 11px; font-weight: bold; }
+  .green { color: #00ff87; }
+  .red   { color: #ff4500; }
+  .orange{ color: #ff6b35; }
+  .dim   { color: #2a2a2a; }
+
+  .content { flex: 1; background: #080808; overflow: hidden; display: flex; flex-direction: column; }
+
+  .page { padding: 16px 20px; flex: 1; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+
+  .page-title    { color: #ff4500; font-size: 13px; font-weight: bold; letter-spacing: 1px; }
+  .page-subtitle { color: #252525; font-size: 11px; }
+
+  .url-box {
+    background: #0d0d0d;
+    border: 1px solid #161616;
+    padding: 10px 14px;
+    border-radius: 4px;
+  }
+  .url-label { color: #ff6b35; font-size: 10px; font-weight: bold; margin-bottom: 6px; letter-spacing: 1px; }
+  .url-input {
+    background: #101010;
+    border: 1px solid #1a1a1a;
+    border-radius: 3px;
+    padding: 7px 10px;
+    color: #333;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    width: 100%;
+  }
+  .url-input.focused { border-color: #ff4500; color: #888; }
+
+  .options-row { display: flex; gap: 10px; }
+
+  .opt-card {
+    flex: 1;
+    background: #0d0d0d;
+    border: 1px solid #161616;
+    padding: 10px 12px;
+    border-radius: 4px;
+  }
+  .opt-title { color: #ff6b35; font-size: 10px; font-weight: bold; margin-bottom: 6px; letter-spacing: 1px; }
+  .opt-select {
+    background: #101010;
+    border: 1px solid #1a1a1a;
+    border-radius: 3px;
+    padding: 5px 8px;
+    color: #555;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .opt-select .arrow { color: #2a2a2a; }
+
+  .btn-row { display: flex; gap: 10px; align-items: center; }
+
+  .btn-primary {
+    background: #ff4500;
+    color: #000;
+    border: none;
+    padding: 8px 18px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: #2a2a2a;
+    border: 1px solid #1a1a1a;
+    padding: 7px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .progress-panel {
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    padding: 10px 14px;
+    border-radius: 4px;
+  }
+  .prog-title { color: #c8c8c8; font-size: 12px; font-weight: bold; margin-bottom: 6px; }
+  .prog-meta  { display:flex; gap:16px; margin-bottom:6px; }
+  .prog-meta-item .label { color: #252525; font-size: 10px; }
+  .prog-meta-item .val   { color: #ff6b35; font-size: 11px; font-weight: bold; }
+  .prog-bar-bg {
+    background: #111;
+    border-radius: 2px;
+    height: 4px;
+    width: 100%;
+    margin-bottom: 4px;
+    overflow: hidden;
+  }
+  .prog-bar-fill {
+    height: 100%;
+    background: #ff4500;
+    border-radius: 2px;
+    width: 67%;
+  }
+  .prog-pct { color: #ff6b35; font-size: 10px; text-align: right; }
+
+  .log-panel {
+    background: #050505;
+    border: 1px solid #111;
+    border-top: 1px solid #161616;
+    padding: 8px 12px;
+    border-radius: 4px;
+    flex: 1;
+    overflow: hidden;
+  }
+  .log-title { color: #1e1e1e; font-size: 10px; margin-bottom: 6px; letter-spacing: 1px; }
+  .log-line  { font-size: 11px; margin-bottom: 3px; }
+  .log-time  { color: #1e1e1e; }
+  .log-ok    { color: #00ff87; }
+  .log-info  { color: #ff6b35; }
+  .log-dim   { color: #252525; }
+
+  .footerbar {
+    background: #0d0d0d;
+    border-top: 1px solid #1a1a1a;
+    padding: 0 16px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .fkey   { color: #ff6b35; font-size: 11px; font-weight: bold; }
+  .flabel { color: #252525; font-size: 11px; margin-right: 12px; }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid #141414;
+    background: #080808;
+  }
+  .tab {
+    padding: 7px 14px;
+    font-size: 11px;
+    color: #252525;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .tab.active {
+    color: #ff6b35;
+    border-bottom: 2px solid #ff4500;
+  }
+</style>
+
+<div class="terminal">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <div class="titlebar-text">C:\Windows\System32\cmd.exe — ytdl-pro</div>
+  </div>
+
+  <div class="topbar">
+    <div class="topbar-logo">◈ YTDL-PRO</div>
+    <div class="topbar-title">Y T D L - P R O</div>
+    <div class="topbar-right">v1.0.0 · FFmpeg <span>✓</span></div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-brand-name">◈ YTDL-PRO</div>
+        <div class="sb-brand-ver">v1.0.0</div>
+        <div class="sb-brand-line">──────────────</div>
+      </div>
+
+      <div class="sb-group">MENU</div>
+      <div class="sb-item active"><span class="sb-icon">▶</span>Baixar Vídeo</div>
+      <div class="sb-item"><span class="sb-icon">▤</span>Playlist</div>
+
+      <div class="sb-group">BIBLIOTECA</div>
+      <div class="sb-item"><span class="sb-icon">≡</span>Histórico</div>
+
+      <div class="sb-group">SISTEMA</div>
+      <div class="sb-item"><span class="sb-icon">◎</span>Configurações</div>
+      <div class="sb-item"><span class="sb-icon">◉</span>Perfis</div>
+      <div class="sb-item"><span class="sb-icon">i</span>Sobre</div>
+
+      <div class="sb-stats">
+        <div class="sb-stats-title">SESSÃO</div>
+        <div class="sb-stat">
+          <span class="sb-stat-label">✓ Concluídos</span>
+          <span class="sb-stat-val green">7</span>
+        </div>
+        <div class="sb-stat">
+          <span class="sb-stat-label">✗ Erros</span>
+          <span class="sb-stat-val red">0</span>
+        </div>
+        <div class="sb-stat">
+          <span class="sb-stat-label">Threads</span>
+          <span class="sb-stat-val orange">4</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="tab-bar">
+        <div class="tab active">▶ Baixar</div>
+        <div class="tab">⬇ Em progresso (1)</div>
+        <div class="tab">≡ Fila (3)</div>
+      </div>
+
+      <div class="page">
+        <div>
+          <div class="page-title">▸ BAIXAR VÍDEO</div>
+          <div class="page-subtitle">Cole a URL e configure o download</div>
+        </div>
+
+        <div class="url-box">
+          <div class="url-label">URL DO VÍDEO / PLAYLIST</div>
+          <div class="url-input focused">https://youtube.com/playlist?list=PLHz_AreHm4dlKP6QQ...</div>
+        </div>
+
+        <div class="options-row">
+          <div class="opt-card">
+            <div class="opt-title">QUALIDADE</div>
+            <div class="opt-select"><span>★ 1080p — Full HD</span><span class="arrow">▼</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="opt-title">FORMATO</div>
+            <div class="opt-select"><span>MP4 — Vídeo</span><span class="arrow">▼</span></div>
+          </div>
+          <div class="opt-card">
+            <div class="opt-title">THREADS</div>
+            <div class="opt-select"><span>4 — Padrão</span><span class="arrow">▼</span></div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-primary">⬇  BAIXAR AGORA</button>
+          <button class="btn-secondary">⟳ Buscar Info</button>
+        </div>
+
+        <div class="progress-panel">
+          <div class="prog-title">⬇  Curso Python #07 — Operadores Aritméticos</div>
+          <div class="prog-meta">
+            <div class="prog-meta-item">
+              <div class="label">CANAL</div>
+              <div class="val">Curso em Vídeo</div>
+            </div>
+            <div class="prog-meta-item">
+              <div class="label">TAMANHO</div>
+              <div class="val">67.1 / 99.9 MB</div>
+            </div>
+            <div class="prog-meta-item">
+              <div class="label">VELOCIDADE</div>
+              <div class="val">2.4 MB/s</div>
+            </div>
+            <div class="prog-meta-item">
+              <div class="label">ETA</div>
+              <div class="val">14s</div>
+            </div>
+          </div>
+          <div class="prog-bar-bg"><div class="prog-bar-fill"></div></div>
+          <div class="prog-pct">67.1%  ·  vídeo 13 de 48</div>
+        </div>
+
+        <div class="log-panel">
+          <div class="log-title">◈ LOG DE ATIVIDADE</div>
+          <div class="log-line"><span class="log-time">11:41:02</span>  <span class="log-info">Playlist detectada:</span> <span class="dim">48 vídeos</span></div>
+          <div class="log-line"><span class="log-time">11:41:04</span>  <span class="log-ok">✓ Concluído:</span> Curso Python #01 — Seja um Programador</div>
+          <div class="log-line"><span class="log-time">11:41:09</span>  <span class="log-ok">✓ Concluído:</span> Curso Python #02 — Para que serve o Python?</div>
+          <div class="log-line"><span class="log-time">11:41:15</span>  <span class="log-ok">✓ Concluído:</span> Curso Python #03 — Instalando Python3</div>
+          <div class="log-line"><span class="log-time">11:41:22</span>  <span class="log-info">⬇ Baixando:</span> Curso Python #07 — Operadores Aritméticos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footerbar">
+    <span class="fkey">[q]</span><span class="flabel"> Sair</span>
+    <span class="fkey">[1-4]</span><span class="flabel"> Navegar</span>
+    <span class="fkey">[Tab]</span><span class="flabel"> Foco</span>
+    <span class="fkey">[Enter]</span><span class="flabel"> Confirmar</span>
+    <span class="fkey">[Esc]</span><span class="flabel"> Cancelar</span>
+  </div>
+</div>
